@@ -44,8 +44,12 @@ class Downloader(object):
 @click.option("-u", "--url")
 def cli(batch_file, url):
     dl = Downloader(batch_file)
-    if url is not None:
-        assert url.startswith("http")
+    if batch_file is None and url is None:
+        raise click.BadParameter(
+            f"You must provide either the --batch-file option or the --url option"
+        )
+    elif url is not None:
+        raise click.BadParameter(f"Invalid url: {url}.")
         dl.download_video(url)
     else:
         dl.batch_download()
